@@ -1,0 +1,99 @@
+---
+import { Icon } from "astro-icon/components";
+import Eyebrow from "./Eyebrow.astro";
+import { IMAGES } from "@/lib/content";
+import { withBase } from "@/lib/url";
+
+const FEATURES = [
+  {
+    icon: "lucide:house",
+    title: "Whole Apartment",
+    body: "the space is entirely yours. No shared areas, full privacy for your family or group.",
+  },
+  {
+    icon: "lucide:waves",
+    title: "Beach Access",
+    body: "direct access to the Paralia Katerinis beachfront, one of the finest in the Pieria region.",
+  },
+  {
+    icon: "lucide:plus",
+    title: "Centrally Located",
+    body: "restaurants, cafés, and the promenade all within an easy walk.",
+  },
+];
+---
+
+<section id="about" class="px-5 py-20 md:px-14 md:py-28">
+  <div class="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-2 lg:gap-20">
+    <div class="fade-in relative">
+      <div class="relative aspect-[3/4] overflow-hidden">
+        <img
+          src={withBase(IMAGES.livingRoom.src)}
+          alt={IMAGES.livingRoom.alt}
+          class="h-full w-full object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <div
+        class="mt-4 aspect-[4/3] w-3/4 overflow-hidden border-[6px] border-cream sm:absolute sm:-bottom-8 sm:right-0 sm:mt-0 sm:w-[48%] lg:-right-8"
+      >
+        <img
+          src={withBase(IMAGES.bedroom.src)}
+          alt={IMAGES.bedroom.alt}
+          class="h-full w-full object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <div
+        class="absolute -left-3 top-8 bg-navy px-5 py-4 text-center sm:-left-6 sm:px-6 sm:py-5"
+      >
+        <div class="font-display text-[1.8rem] font-light leading-none text-gold">
+          ★4.6
+        </div>
+        <div class="mt-1 text-[0.55rem] uppercase tracking-[0.18em] text-white/55">
+          Airbnb Rated
+        </div>
+      </div>
+    </div>
+
+    <div class="fade-in pt-4" data-delay="2">
+      <Eyebrow>Our Story</Eyebrow>
+      <h2
+        class="mt-4 font-display font-light leading-[1.15] text-text-dark text-[clamp(2rem,5vw,3.4rem)]"
+      >
+        A <em class="italic text-gold">home</em> beside
+        <br class="hidden sm:block" /> the Pierian Sea
+      </h2>
+      <p class="mt-6 max-w-lg text-[0.95rem] font-light leading-[1.85] text-text-mid">
+        Pantheon Apartments sits in the heart of Paralia Katerinis — one of
+        northern Greece's most beloved coastal destinations. With the sea just
+        steps away and Mount Olympus rising on the horizon, every stay feels
+        mythic.
+      </p>
+      <div class="my-8 h-px w-16 bg-border-gold"></div>
+      <div class="space-y-5">
+        {
+          FEATURES.map((f) => (
+            <div class="flex items-start gap-4">
+              <div class="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center border border-border-gold text-gold">
+                <Icon name={f.icon} class="h-4 w-4" aria-hidden="true" />
+              </div>
+              <p class="text-[0.88rem] leading-[1.6] text-text-mid">
+                <strong class="font-medium text-text-dark">{f.title}</strong>{" "}
+                — {f.body}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+      <a
+        href="#booking"
+        class="mt-9 inline-block bg-gold px-8 py-3 text-[0.78rem] font-medium uppercase tracking-[0.18em] text-navy transition-[background,transform] hover:-translate-y-px hover:bg-gold-light"
+      >
+        Reserve Your Stay
+      </a>
+    </div>
+  </div>
+</section>

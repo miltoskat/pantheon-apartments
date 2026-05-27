@@ -1,0 +1,99 @@
+---
+import { Icon } from "astro-icon/components";
+import {
+  FOOTER_LINKS,
+  HOST_TAGLINE,
+  HOST_ADDRESS,
+  RATING_SUMMARY,
+} from "@/lib/content";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-navy px-5 pb-10 pt-16 md:px-14">
+  <div
+    class="mx-auto grid max-w-6xl grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] lg:gap-12"
+  >
+    <div>
+      <a
+        href="#"
+        class="font-display text-[1.4rem] font-light uppercase tracking-[0.2em] text-warm-white"
+      >
+        Pantheon <span class="text-gold">·</span> Apartments
+      </a>
+      <p class="mt-4 max-w-[260px] text-[0.8rem] font-light leading-[1.7] text-white/45">
+        {HOST_TAGLINE}
+      </p>
+      <div class="mt-5 flex items-center gap-2 text-[0.8rem] font-light text-white/55">
+        <Icon name="lucide:map-pin" class="h-[14px] w-[14px] text-gold" aria-hidden="true" />
+        <span>{HOST_ADDRESS}</span>
+      </div>
+      <div class="mt-2 flex items-center gap-2 text-[0.8rem] font-light text-white/55">
+        <Icon name="lucide:mail" class="h-[14px] w-[14px] text-gold" aria-hidden="true" />
+        <a href="#" class="text-gold">Contact via Airbnb</a>
+      </div>
+    </div>
+
+    <div>
+      <div class="text-[0.62rem] font-medium uppercase tracking-[0.22em] text-white/35">
+        Navigate
+      </div>
+      <ul class="mt-5 space-y-2.5">
+        {
+          FOOTER_LINKS.navigate.map((l) => (
+            <li>
+              <a
+                href={l.href}
+                class="text-[0.82rem] font-light text-white/55 transition-colors hover:text-gold-light"
+              >
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div>
+      <div class="text-[0.62rem] font-medium uppercase tracking-[0.22em] text-white/35">
+        The Stay
+      </div>
+      <ul class="mt-5 space-y-2.5">
+        {
+          FOOTER_LINKS.stay.map((l) => (
+            <li class="text-[0.82rem] font-light text-white/55">{l.label}</li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div>
+      <div class="text-[0.62rem] font-medium uppercase tracking-[0.22em] text-white/35">
+        Nearby
+      </div>
+      <ul class="mt-5 space-y-2.5">
+        {
+          FOOTER_LINKS.nearby.map((l) => (
+            <li class="text-[0.82rem] font-light text-white/55">{l.label}</li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
+  <div
+    class="mx-auto mt-12 flex max-w-6xl flex-col items-start gap-3 border-t border-white/10 pt-7 text-[0.72rem] font-light text-white/30 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <span>
+      © {year} Pantheon Apartments, Paralia Katerinis. All rights reserved.
+    </span>
+    <div class="flex items-center gap-2 text-white/40">
+      <span class="tracking-[0.05em] text-gold">{RATING_SUMMARY.stars}</span>
+      <span>
+        {RATING_SUMMARY.score} on {RATING_SUMMARY.platform} · {
+          RATING_SUMMARY.count.replace(" Reviews", " reviews")
+        } · ★ 4.63 on Airbnb
+      </span>
+    </div>
+  </div>
+</footer>

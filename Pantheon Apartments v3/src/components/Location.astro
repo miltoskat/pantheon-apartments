@@ -1,0 +1,56 @@
+---
+import { Icon } from "astro-icon/components";
+import Eyebrow from "./Eyebrow.astro";
+import { LOCATION_POINTS } from "@/lib/content";
+---
+
+<section
+  id="location"
+  class="grid min-h-[540px] grid-cols-1 bg-navy lg:grid-cols-2"
+>
+  <div class="fade-in flex flex-col justify-center px-5 py-16 md:px-14 lg:px-16 lg:py-24">
+    <Eyebrow tone="light">Find Us</Eyebrow>
+    <h2
+      class="mt-4 font-display font-light leading-[1.15] text-warm-white text-[clamp(2rem,5vw,3.4rem)]"
+    >
+      Paralia <em class="italic text-gold-light">Katerinis</em>,
+      <br class="hidden sm:block" /> Pieria, Greece
+    </h2>
+    <p class="mt-6 max-w-lg text-[0.95rem] font-light leading-[1.85] text-white/60">
+      Positioned in the vibrant heart of Paralia Katerinis — the beach is on
+      your doorstep, and the legendary peak of Mount Olympus frames the
+      horizon.
+    </p>
+    <div class="mt-8">
+      {
+        LOCATION_POINTS.map((p) => (
+          <div class="flex items-center gap-3 border-b border-white/10 py-3 text-[0.85rem] font-light text-white/70">
+            <span class="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gold" />
+            <span>
+              <strong class="font-normal text-warm-white">{p.label}</strong>{" "}
+              — {p.detail}
+            </span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="relative min-h-[320px] overflow-hidden lg:min-h-0">
+    <iframe
+      src="https://maps.google.com/maps?q=Paralia+Katerinis,+Pieria,+Greece&z=14&output=embed"
+      title="Pantheon Apartments location map"
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      class="h-full w-full border-0 md:[filter:brightness(0.85)_contrast(1.1)_saturate(0.7)]"
+    >
+    </iframe>
+    <div
+      class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+    >
+      <div class="flex h-12 w-12 animate-pin-pulse items-center justify-center rounded-full bg-gold text-navy">
+        <Icon name="lucide:map-pin" class="h-5 w-5" aria-hidden="true" />
+      </div>
+    </div>
+  </div>
+</section>

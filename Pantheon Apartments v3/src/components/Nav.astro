@@ -1,0 +1,127 @@
+---
+import { Icon } from "astro-icon/components";
+import { NAV_LINKS } from "@/lib/content";
+---
+
+<nav
+  id="navbar"
+  class="fixed inset-x-0 top-0 z-50 flex items-center justify-between bg-transparent px-5 py-5 transition-[background,backdrop-filter] duration-[400ms] md:px-14"
+>
+  <a
+    href="#"
+    class="font-display text-[1.05rem] font-light uppercase tracking-[0.22em] text-warm-white md:text-[1.3rem]"
+  >
+    Pantheon <span class="text-gold">·</span> Apartments
+  </a>
+
+  <ul class="hidden md:flex md:items-center md:gap-10">
+    {
+      NAV_LINKS.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class="text-[0.72rem] font-normal uppercase tracking-[0.2em] text-white/75 transition-colors hover:text-gold-light"
+          >
+            {link.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <a
+    href="#booking"
+    class="hidden bg-gold px-6 py-2.5 text-[0.72rem] font-medium uppercase tracking-[0.18em] text-navy transition-colors hover:bg-gold-light md:inline-block"
+  >
+    Book Now
+  </a>
+
+  <button
+    type="button"
+    id="nav-menu-toggle"
+    aria-label="Open menu"
+    aria-expanded="false"
+    aria-controls="nav-drawer"
+    class="text-warm-white md:hidden"
+  >
+    <Icon name="lucide:menu" class="h-6 w-6 [&[data-show=false]]:block" data-show="true" />
+    <Icon name="lucide:x" class="hidden h-6 w-6" data-show="false" />
+  </button>
+
+  <div
+    id="nav-drawer"
+    hidden
+    class="absolute inset-x-0 top-full flex flex-col gap-6 border-t border-white/10 bg-navy/95 px-5 py-8 backdrop-blur-xl md:hidden"
+  >
+    {
+      NAV_LINKS.map((link) => (
+        <a
+          href={link.href}
+          data-nav-drawer-link
+          class="text-sm uppercase tracking-[0.2em] text-white/80"
+        >
+          {link.label}
+        </a>
+      ))
+    }
+    <a
+      href="#booking"
+      data-nav-drawer-link
+      class="mt-2 inline-block bg-gold px-6 py-3 text-center text-[0.75rem] font-medium uppercase tracking-[0.18em] text-navy"
+    >
+      Book Now
+    </a>
+  </div>
+</nav>
+
+<script>
+  const nav = document.getElementById("navbar");
+  const toggle = document.getElementById("nav-menu-toggle");
+  const drawer = document.getElementById("nav-drawer");
+
+  if (nav) {
+    const scrolledClasses = ["bg-navy/95", "backdrop-blur-xl"];
+    const updateScrolled = () => {
+      const isOpen = drawer && !drawer.hasAttribute("hidden");
+      if (window.scrollY > 60 || isOpen) nav.classList.add(...scrolledClasses);
+      else nav.classList.remove(...scrolledClasses);
+    };
+    updateScrolled();
+    window.addEventListener("scroll", updateScrolled, { passive: true });
+
+    if (toggle && drawer) {
+      const icons = toggle.querySelectorAll<HTMLElement>("[data-show]");
+      const setOpen = (open: boolean) => {
+        if (open) {
+          drawer.removeAttribute("hidden");
+          document.body.style.overflow = "hidden";
+        } else {
+          drawer.setAttribute("hidden", "");
+          document.body.style.overflow = "";
+        }
+        toggle.setAttribute("aria-expanded", String(open));
+        toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+        icons.forEach((el) => {
+          const show = el.dataset.show === "true";
+          el.classList.toggle("hidden", show !== open ? show : !show);
+          // simpler: show "menu" icon when closed, "x" icon when open
+        });
+        // Re-set icon visibility explicitly to avoid the convoluted toggle above:
+        icons.forEach((el) => {
+          const isMenuIcon = el.dataset.show === "true";
+          el.classList.toggle("hidden", open ? isMenuIcon : !isMenuIcon);
+        });
+        updateScrolled();
+      };
+
+      toggle.addEventListener("click", () => {
+        const open = drawer.hasAttribute("hidden");
+        setOpen(open);
+      });
+
+      drawer.querySelectorAll<HTMLAnchorElement>("[data-nav-drawer-link]").forEach((a) =>
+        a.addEventListener("click", () => setOpen(false))
+      );
+    }
+  }
+</script>

@@ -1,0 +1,69 @@
+---
+import Eyebrow from "./Eyebrow.astro";
+import { REVIEWS, RATING_SUMMARY } from "@/lib/content";
+---
+
+<section id="reviews" class="bg-cream px-5 py-20 md:px-14 md:py-28">
+  <div class="mx-auto max-w-6xl">
+    <div class="fade-in flex flex-col items-start gap-8 md:flex-row md:items-end md:gap-12">
+      <div class="flex-shrink-0 bg-navy px-9 py-7 text-center">
+        <span class="block font-display text-[3.4rem] font-light leading-none text-gold md:text-[3.8rem]">
+          {RATING_SUMMARY.score}
+        </span>
+        <span class="mt-1.5 block text-[0.85rem] tracking-[0.1em] text-gold">
+          {RATING_SUMMARY.stars}
+        </span>
+        <span class="mt-1.5 block text-[0.62rem] uppercase tracking-[0.2em] text-white/45">
+          {RATING_SUMMARY.count}
+        </span>
+        <span class="mt-0.5 block text-[0.55rem] uppercase tracking-[0.18em] text-white/30">
+          on {RATING_SUMMARY.platform}
+        </span>
+      </div>
+      <div>
+        <Eyebrow>Guest Stories</Eyebrow>
+        <h2
+          class="mt-4 font-display font-light leading-[1.15] text-text-dark text-[clamp(2rem,5vw,3.4rem)]"
+        >
+          Loved by those
+          <br class="hidden sm:block" /> who{" "}
+          <em class="italic text-gold">stayed</em>
+        </h2>
+      </div>
+    </div>
+
+    <div class="mt-12 grid grid-cols-1 gap-4 lg:grid-cols-2">
+      {
+        REVIEWS.map((r, i) => (
+          <div
+            class="fade-in border-l-[3px] border-gold bg-sand p-8"
+            data-delay={i === 0 ? undefined : 1}
+          >
+            <p class="font-display text-[1.05rem] font-light italic leading-[1.7] text-text-dark">
+              &ldquo;{r.quote}&rdquo;
+            </p>
+            <div class="mt-5 flex items-center gap-3">
+              <div class="flex h-8 w-8 items-center justify-center rounded-full bg-navy text-[0.75rem] font-medium text-gold">
+                {r.initial}
+              </div>
+              <div class="flex-1">
+                <div class="text-[0.8rem] font-medium tracking-[0.04em] text-text-dark">
+                  {r.name}
+                </div>
+                <div class="mt-0.5 text-[0.72rem] text-text-muted">
+                  {r.date}
+                </div>
+              </div>
+              <div
+                class="text-[0.7rem] text-gold"
+                aria-label={`${r.stars} stars`}
+              >
+                {"★".repeat(r.stars)}
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,25 @@
+---
+import { STATS } from "@/lib/content";
+---
+
+<div class="grid grid-cols-2 bg-navy md:grid-cols-4">
+  {
+    STATS.map((stat, i) => (
+      <div
+        class:list={[
+          "px-6 py-7 text-center md:px-8",
+          i < STATS.length - 1 && "md:border-r md:border-white/10",
+          i % 2 === 0 && "border-r border-white/10",
+          i < 2 && "border-b border-white/10 md:border-b-0",
+        ]}
+      >
+        <div class="font-display text-[1.9rem] font-light leading-none text-gold md:text-[2.1rem]">
+          {stat.value}
+        </div>
+        <div class="mt-1.5 text-[0.6rem] uppercase tracking-[0.2em] text-white/45 md:text-[0.65rem]">
+          {stat.label}
+        </div>
+      </div>
+    ))
+  }
+</div>

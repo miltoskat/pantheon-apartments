@@ -1,0 +1,29 @@
+---
+type Tone = "light" | "dark";
+type LineWidth = "sm" | "md" | "lg";
+
+interface Props {
+  tone?: Tone;
+  width?: LineWidth;
+  class?: string;
+}
+
+const { tone = "light", width = "md", class: extra = "" } = Astro.props;
+
+const lineClass: Record<LineWidth, string> = {
+  sm: "before:w-7",
+  md: "before:w-8",
+  lg: "before:w-10",
+};
+
+const toneClass: Record<Tone, string> = {
+  light: "text-gold before:bg-gold",
+  dark: "text-gold before:bg-gold/50",
+};
+---
+
+<div
+  class={`inline-flex items-center gap-3 text-[0.68rem] font-normal uppercase tracking-[0.28em] before:content-[''] before:block before:h-px ${lineClass[width]} ${toneClass[tone]} ${extra}`}
+>
+  <slot />
+</div>

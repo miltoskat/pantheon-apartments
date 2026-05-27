@@ -1,0 +1,85 @@
+---
+import { IMAGES } from "@/lib/content";
+import { withBase } from "@/lib/url";
+---
+
+<section
+  id="hero"
+  class="relative flex min-h-[560px] items-end overflow-hidden md:h-screen md:min-h-[640px]"
+>
+  <div class="absolute inset-0 animate-hero-zoom">
+    <img
+      src={withBase(IMAGES.hero.src)}
+      alt={IMAGES.hero.alt}
+      class="h-full w-full object-cover object-[center_30%]"
+      fetchpriority="high"
+      decoding="async"
+    />
+  </div>
+
+  <div
+    class="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/40 to-navy/10"
+  >
+  </div>
+
+  <div class="relative z-10 w-full animate-fade-up px-5 pb-20 md:px-14 md:pb-28">
+    <div
+      class="inline-flex items-center gap-3 text-[0.68rem] font-normal uppercase tracking-[0.28em] text-gold before:block before:h-px before:w-8 before:bg-gold before:content-['']"
+    >
+      Paralia Katerinis, Greece
+    </div>
+    <h1
+      class="mt-5 font-display font-light leading-[1.08] text-warm-white text-[clamp(2.4rem,8vw,5.2rem)]"
+    >
+      Where the <em class="italic text-gold-light">Aegean</em>
+      <br class="hidden sm:block" /> meets the
+      <br class="hidden sm:block" /> foot of Olympus
+    </h1>
+    <p class="mt-6 max-w-md text-[0.9rem] font-light text-white/75">
+      Spacious apartments steps from the sea — your private Greek summer,
+      exactly as it should be.
+    </p>
+    <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
+      <a
+        href="#booking"
+        class="inline-flex items-center justify-center bg-gold px-9 py-3.5 text-[0.78rem] font-medium uppercase tracking-[0.18em] text-navy transition-[background,transform] hover:-translate-y-px hover:bg-gold-light"
+      >
+        Check Availability
+      </a>
+      <a
+        href="#gallery"
+        class="inline-flex items-center gap-1 self-start border-b border-white/30 pb-1 text-[0.78rem] uppercase tracking-[0.18em] text-warm-white transition-colors hover:border-gold hover:text-gold-light sm:self-auto"
+      >
+        Explore Photos ↓
+      </a>
+    </div>
+  </div>
+
+  <div
+    id="hero-scroll"
+    class="pointer-events-none absolute bottom-10 right-6 hidden animate-fade-up flex-col items-center gap-3 transition-opacity duration-500 md:right-14 md:flex"
+  >
+    <div
+      class="h-12 w-px origin-top animate-scroll-pulse bg-gradient-to-b from-gold/0 via-gold to-gold/0"
+    >
+    </div>
+    <span class="vertical-rl text-[0.6rem] uppercase tracking-[0.3em] text-white/60">
+      Scroll
+    </span>
+  </div>
+</section>
+
+<script>
+  const indicator = document.getElementById("hero-scroll");
+  if (indicator) {
+    const update = () => {
+      if (window.scrollY > 120) {
+        indicator.classList.add("opacity-0");
+      } else {
+        indicator.classList.remove("opacity-0");
+      }
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+  }
+</script>

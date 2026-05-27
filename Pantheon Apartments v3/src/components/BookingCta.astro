@@ -1,0 +1,226 @@
+---
+import { Icon } from "astro-icon/components";
+import Eyebrow from "./Eyebrow.astro";
+import { BOOKING } from "@/lib/content";
+
+const today = new Date();
+const minDate = today.toISOString().slice(0, 10);
+
+const tomorrow = new Date(today);
+tomorrow.setDate(tomorrow.getDate() + 1);
+const minCheckout = tomorrow.toISOString().slice(0, 10);
+---
+
+<section
+  id="booking"
+  class="bg-sand px-5 py-24 text-center md:px-14 md:py-32"
+>
+  <div class="fade-in mx-auto max-w-4xl">
+    <div class="flex justify-center">
+      <Eyebrow>Reserve Your Summer</Eyebrow>
+    </div>
+    <h2
+      class="mx-auto mt-5 font-display font-light leading-[1.15] text-text-dark text-[clamp(2.2rem,5.5vw,3.8rem)]"
+    >
+      The <em class="italic text-gold">sea</em> is waiting.
+      <br /> Is your date free?
+    </h2>
+    <p
+      class="mx-auto mt-6 max-w-xl text-[0.95rem] font-light leading-[1.85] text-text-mid"
+    >
+      Pick your dates and number of guests, then choose where to book —
+      we'll take you there with your selection ready.
+    </p>
+
+    <!-- Shared inputs -->
+    <div
+      id="booking-form"
+      class="mt-10 grid grid-cols-1 gap-px border border-border-gold bg-warm-white p-2 text-left shadow-[0_4px_40px_rgb(13_27_42_/_0.08)] md:grid-cols-3 md:p-0"
+    >
+      <label class="bg-cream p-5 transition-colors hover:bg-sand md:border-r md:border-border-gold">
+        <span class="block text-[0.6rem] uppercase tracking-[0.2em] text-text-muted">
+          Check In
+        </span>
+        <input
+          type="date"
+          id="booking-checkin"
+          min={minDate}
+          class="mt-1 w-full bg-transparent font-display text-[1.05rem] text-text-dark outline-none"
+          aria-label="Check in date"
+        />
+      </label>
+      <label class="bg-cream p-5 transition-colors hover:bg-sand md:border-r md:border-border-gold">
+        <span class="block text-[0.6rem] uppercase tracking-[0.2em] text-text-muted">
+          Check Out
+        </span>
+        <input
+          type="date"
+          id="booking-checkout"
+          min={minCheckout}
+          class="mt-1 w-full bg-transparent font-display text-[1.05rem] text-text-dark outline-none"
+          aria-label="Check out date"
+        />
+      </label>
+      <label class="bg-cream p-5 transition-colors hover:bg-sand">
+        <span class="block text-[0.6rem] uppercase tracking-[0.2em] text-text-muted">
+          Guests
+        </span>
+        <input
+          type="number"
+          id="booking-guests"
+          min="1"
+          max="4"
+          value="2"
+          class="mt-1 w-full bg-transparent font-display text-[1.05rem] text-text-dark outline-none"
+          aria-label="Number of guests (1 to 4)"
+        />
+      </label>
+    </div>
+
+    <!-- Three booking options -->
+    <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+      <a
+        id="book-airbnb"
+        href={BOOKING.airbnb.listingUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="group flex flex-col items-center justify-between gap-5 border border-border-gold bg-warm-white p-7 text-center transition-[transform,box-shadow,background] hover:-translate-y-1 hover:border-gold hover:shadow-[0_12px_32px_rgb(13_27_42_/_0.10)]"
+      >
+        <div class="flex flex-col items-center gap-3">
+          <div class="flex h-12 w-12 items-center justify-center rounded-full bg-[#FF5A5F]/10 text-[#FF5A5F]">
+            <Icon name="lucide:bed-double" class="h-5 w-5" aria-hidden="true" />
+          </div>
+          <div>
+            <div class="font-display text-[1.4rem] font-normal text-text-dark">
+              Airbnb
+            </div>
+            <p class="mt-1 text-[0.78rem] font-light text-text-muted">
+              ★ 4.63 · Verified host
+            </p>
+          </div>
+        </div>
+        <span
+          class="inline-flex items-center gap-2 text-[0.72rem] font-medium uppercase tracking-[0.18em] text-gold transition-colors group-hover:text-text-dark"
+        >
+          Book on Airbnb
+          <Icon name="lucide:arrow-up-right" class="h-3.5 w-3.5" aria-hidden="true" />
+        </span>
+      </a>
+
+      <a
+        id="book-bookingcom"
+        href={BOOKING.bookingCom.listingUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="group flex flex-col items-center justify-between gap-5 border border-border-gold bg-warm-white p-7 text-center transition-[transform,box-shadow,background] hover:-translate-y-1 hover:border-gold hover:shadow-[0_12px_32px_rgb(13_27_42_/_0.10)]"
+      >
+        <div class="flex flex-col items-center gap-3">
+          <div class="flex h-12 w-12 items-center justify-center rounded-full bg-[#003580]/10 text-[#003580]">
+            <Icon name="lucide:building-2" class="h-5 w-5" aria-hidden="true" />
+          </div>
+          <div>
+            <div class="font-display text-[1.4rem] font-normal text-text-dark">
+              Booking.com
+            </div>
+            <p class="mt-1 text-[0.78rem] font-light text-text-muted">
+              Free cancellation available
+            </p>
+          </div>
+        </div>
+        <span
+          class="inline-flex items-center gap-2 text-[0.72rem] font-medium uppercase tracking-[0.18em] text-gold transition-colors group-hover:text-text-dark"
+        >
+          Book on Booking.com
+          <Icon name="lucide:arrow-up-right" class="h-3.5 w-3.5" aria-hidden="true" />
+        </span>
+      </a>
+
+      <a
+        href={`tel:${BOOKING.phone.tel}`}
+        class="group flex flex-col items-center justify-between gap-5 border border-border-gold bg-navy p-7 text-center transition-[transform,box-shadow] hover:-translate-y-1 hover:shadow-[0_12px_32px_rgb(13_27_42_/_0.18)]"
+      >
+        <div class="flex flex-col items-center gap-3">
+          <div class="flex h-12 w-12 items-center justify-center rounded-full bg-gold/15 text-gold">
+            <Icon name="lucide:phone" class="h-5 w-5" aria-hidden="true" />
+          </div>
+          <div>
+            <div class="font-display text-[1.4rem] font-normal text-warm-white">
+              Call Direct
+            </div>
+            <p class="mt-1 text-[0.78rem] font-light text-white/55">
+              {BOOKING.phone.display}
+            </p>
+          </div>
+        </div>
+        <span
+          class="inline-flex items-center gap-2 text-[0.72rem] font-medium uppercase tracking-[0.18em] text-gold"
+        >
+          Speak to the host
+          <Icon name="lucide:arrow-up-right" class="h-3.5 w-3.5" aria-hidden="true" />
+        </span>
+      </a>
+    </div>
+
+    <p class="mt-8 text-[0.75rem] font-light text-text-muted">
+      Free cancellation on most dates · Direct booking — no hidden fees ·
+      Check-in from 3:00 PM
+    </p>
+  </div>
+</section>
+
+<script
+  is:inline
+  define:vars={{ BOOKING }}
+>
+  (function () {
+    const checkin = document.getElementById("booking-checkin");
+    const checkout = document.getElementById("booking-checkout");
+    const guests = document.getElementById("booking-guests");
+    const airbnb = document.getElementById("book-airbnb");
+    const bookingCom = document.getElementById("book-bookingcom");
+
+    if (!checkin || !checkout || !guests || !airbnb || !bookingCom) return;
+
+    function build(base, paramMap, extra) {
+      const url = new URL(base);
+      const ci = checkin.value;
+      const co = checkout.value;
+      const g = guests.value;
+      if (ci) url.searchParams.set(paramMap.checkIn, ci);
+      if (co) url.searchParams.set(paramMap.checkOut, co);
+      if (g) url.searchParams.set(paramMap.guests, g);
+      if (extra) {
+        for (const [k, v] of Object.entries(extra)) {
+          url.searchParams.set(k, v);
+        }
+      }
+      return url.toString();
+    }
+
+    function updateLinks() {
+      // Ensure check-out > check-in
+      if (checkin.value && checkout.value && checkout.value <= checkin.value) {
+        const d = new Date(checkin.value);
+        d.setDate(d.getDate() + 1);
+        checkout.value = d.toISOString().slice(0, 10);
+      }
+      // Clamp guests 1..4
+      const g = parseInt(guests.value || "0", 10);
+      if (!Number.isFinite(g) || g < 1) guests.value = "1";
+      else if (g > 4) guests.value = "4";
+
+      airbnb.href = build(BOOKING.airbnb.listingUrl, BOOKING.airbnb.params);
+      bookingCom.href = build(
+        BOOKING.bookingCom.listingUrl,
+        BOOKING.bookingCom.params,
+        BOOKING.bookingCom.extra
+      );
+    }
+
+    [checkin, checkout, guests].forEach((el) =>
+      el.addEventListener("input", updateLinks)
+    );
+    // Run once so default guest count (2) is reflected in the hrefs immediately.
+    updateLinks();
+  })();
+</script>

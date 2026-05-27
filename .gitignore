@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.next/
+out/
+
+# Astro
+.astro/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Work-in-progress drop folders
+_reviews_inbox/
+
+# Local-only working folders (not deployed)
+Pantheon Apartments v1/
+Pantheon Apartments v1.zip
+Pantheon Apartments v2/
+
+# Claude / AI agent project docs (kept local only)
+CLAUDE.md
+AGENTS.md
+.claude/
+
+# Loose assets at repo root (regenerable, not source)
+Screenshot*.png
+Screenshot*.PNG
+pantheon-apartments-qr.*

@@ -1,0 +1,41 @@
+---
+import { Icon } from "astro-icon/components";
+import Eyebrow from "./Eyebrow.astro";
+import { AMENITIES } from "@/lib/content";
+---
+
+<section id="amenities" class="bg-sand px-5 py-20 md:px-14 md:py-28">
+  <div class="mx-auto max-w-6xl">
+    <div class="fade-in">
+      <Eyebrow>What's Included</Eyebrow>
+      <h2
+        class="mt-4 font-display font-light leading-[1.15] text-text-dark text-[clamp(2rem,5vw,3.4rem)]"
+      >
+        Crafted for <em class="italic text-gold">comfort</em>
+      </h2>
+    </div>
+
+    <div
+      class="mt-12 grid grid-cols-1 gap-px bg-border-gold p-px sm:grid-cols-2 lg:grid-cols-3"
+    >
+      {
+        AMENITIES.map((a, i) => (
+          <div
+            class="fade-in group bg-cream p-9 transition-[background,transform,box-shadow] hover:-translate-y-0.5 hover:bg-warm-white hover:shadow-[0_8px_24px_rgb(13_27_42_/_0.06)]"
+            data-delay={(i % 3) + 1}
+          >
+            <div class="flex h-10 w-10 items-center justify-center border border-border-gold text-gold">
+              <Icon name={a.icon} class="h-[18px] w-[18px]" aria-hidden="true" />
+            </div>
+            <h3 class="mt-5 font-display text-[1.25rem] font-normal text-text-dark">
+              {a.title}
+            </h3>
+            <p class="mt-1.5 text-[0.83rem] font-light leading-[1.65] text-text-muted">
+              {a.desc}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,51 @@
+---
+import Eyebrow from "./Eyebrow.astro";
+import { IMAGES } from "@/lib/content";
+import { withBase } from "@/lib/url";
+
+const ITEMS = [
+  { ...IMAGES.hero,          spans: "lg:col-span-5 lg:row-span-2 lg:aspect-auto" },
+  { ...IMAGES.livingRoom,    spans: "lg:col-span-4" },
+  { ...IMAGES.bedroom,       spans: "lg:col-span-3" },
+  { ...IMAGES.kitchen,       spans: "lg:col-span-4" },
+  { ...IMAGES.bathroom,      spans: "lg:col-span-3" },
+  { ...IMAGES.diningArea,    spans: "lg:col-span-4" },
+  { ...IMAGES.kitchenDetail, spans: "lg:col-span-4" },
+  { ...IMAGES.bathroomSuite, spans: "lg:col-span-4" },
+];
+---
+
+<section id="gallery" class="bg-navy px-5 py-20 md:px-14 md:py-28">
+  <div class="fade-in mx-auto mb-10 max-w-6xl">
+    <Eyebrow tone="light">The Apartments</Eyebrow>
+    <h2
+      class="mt-4 font-display font-light leading-[1.15] text-warm-white text-[clamp(2rem,5vw,3.4rem)]"
+    >
+      Light, space &amp;{" "}
+      <em class="italic text-gold-light">sea air</em>
+    </h2>
+  </div>
+
+  <div
+    class="mx-auto grid max-w-6xl grid-cols-2 gap-2 lg:grid-cols-12 lg:grid-rows-[260px_260px_260px] lg:gap-2"
+  >
+    {
+      ITEMS.map((item) => (
+        <div
+          class:list={[
+            "group relative aspect-[4/3] overflow-hidden lg:aspect-auto lg:h-full",
+            item.spans,
+          ]}
+        >
+          <img
+            src={withBase(item.src)}
+            alt={item.alt}
+            class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      ))
+    }
+  </div>
+</section>

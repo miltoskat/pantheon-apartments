@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pantheon-apartments.gr/sitemap-index.xml

@@ -1,65 +1,129 @@
-# Pantheon Apartments — v3 (Astro)
+# Pantheon Apartments — v3
 
-Static Astro + Tailwind v4 build of the Paralia Katerinis vacation-rental site, designed to deploy to GitHub Pages with zero runtime.
+The production website for **Pantheon Apartments**, a seafront vacation rental in Paralia Katerinis (Pieria, Greece). Two booking products on one property: a **One-Bedroom Apartment** (sleeps 4, full kitchen) and a **Deluxe Double Room** (sleeps 2, ensuite).
+
+- 🌐 Live: **https://pantheon-apartments.gr**
+- 🔁 Fallback: **https://miltoskat.github.io/pantheon-apartments/** (auto-redirects to the custom domain)
+- 📦 Source: **https://github.com/miltoskat/pantheon-apartments**
+
+## Stack
+
+- **Astro 6** — static-site generator, zero JS by default
+- **Tailwind CSS v4** — CSS-first `@theme` design tokens in `src/styles/global.css`
+- **astro-icon + lucide** — SVG icons inlined at build time
+- **@astrojs/sitemap** — auto-generated `sitemap-index.xml` for search engines
+- **next/font equivalent** — Cormorant Garamond + Jost loaded from Google Fonts
+
+Hosted on **GitHub Pages** (custom domain via Papaki DNS), built and deployed by GitHub Actions on every push to `main`.
 
 ## Run
 
 Requires **Node 22+**.
 
 ```bash
-nvm use 22         # if you use nvm
+nvm use 22
 npm install        # once
 npm run dev        # http://localhost:4321
 npm run build      # → ./dist (the deploy artifact)
 npm run preview    # serve the built dist locally
+npx astro check    # type/template check (used in CI)
 ```
 
-## What's where
+## File structure
 
-- `src/pages/index.astro` — composes the home page from section components.
-- `src/layouts/BaseLayout.astro` — `<html>` wrapper, fonts (Google Fonts `<link>`), `<Nav>`, `<Footer>`, global `<FadeIn>` observer.
-- `src/components/*.astro` — one file per section. All are server-rendered to static HTML. The few interactive bits live in tiny inline `<script>` tags inside their component (Astro bundles them automatically).
-- `src/lib/content.ts` — **all editable copy + booking targets**: stats, amenities, reviews, location points, footer links, image metadata, and the `BOOKING` constants (Airbnb listing id, Booking.com slug, phone formats). Edit this file to change content without touching JSX/Astro markup.
-- `src/styles/global.css` — Tailwind v4 `@theme` design tokens, keyframes, `.fade-in` base styles.
-- `public/images/*.jpg` — the 5 self-hosted property photos.
+```
+Pantheon Apartments v3/
+├── src/
+│   ├── pages/index.astro          ← composes all sections
+│   ├── layouts/BaseLayout.astro   ← <head>, fonts, JSON-LD, Nav + Footer + FadeIn observer
+│   ├── components/
+│   │   ├── Nav.astro              ← scroll-state + mobile drawer (inline <script>)
+│   │   ├── Hero.astro             ← full-bleed photo + zoom animation
+│   │   ├── StatsBar.astro
+│   │   ├── About.astro            ← asymmetric overlap layout + badge
+│   │   ├── Gallery.astro          ← split per room: mosaic + 3-col grid
+│   │   ├── Amenities.astro
+│   │   ├── Rooms.astro            ← side-by-side room cards
+│   │   ├── Reviews.astro          ← real Booking.com reviews
+│   │   ├── Location.astro         ← Google Maps embed + animated pin
+│   │   ├── BookingCta.astro       ← room selector → 3-platform redirect
+│   │   ├── Footer.astro
+│   │   ├── FadeIn.astro           ← shared IntersectionObserver
+│   │   └── Eyebrow.astro          ← gold-line label component
+│   ├── lib/
+│   │   ├── content.ts             ← ALL editable copy + URLs + features
+│   │   └── url.ts                 ← withBase() helper for asset paths
+│   └── styles/global.css          ← Tailwind v4 @theme tokens + keyframes
+└── public/
+    ├── images/                    ← 8 main-apartment photos
+    ├── images/mini/               ← 6 deluxe-double-room photos
+    ├── logo.png                   ← temple icon (transparent) — nav, favicon
+    ├── logo-lockup.png            ← temple + wordmark — footer
+    ├── logo.jpg                   ← OG image for social previews
+    ├── favicon.ico / .png         ← browser tab icons
+    ├── apple-touch-icon.png       ← iOS home-screen icon
+    ├── robots.txt                 ← allows all crawlers, points at sitemap
+    └── CNAME                      ← pantheon-apartments.gr
+```
 
-## The booking section (`BookingCta.astro`)
+## Editing content
 
-Replaces the cosmetic search form from v2. Now: shared date/guest inputs at the top + three tiles below — **Airbnb**, **Booking.com**, **Call Direct** (`tel:` link).
+**99% of changes happen in one file:** `src/lib/content.ts`.
 
-A tiny inline `<script>` watches the three inputs and rewrites the `href` of the Airbnb / Booking.com tiles with platform-specific query params:
+| Constant | What it controls |
+|---|---|
+| `NAV_LINKS` | Top-nav menu items |
+| `STATS` | The 4-cell stat bar under the hero |
+| `AMENITIES` | The 6 amenity cards (each with a lucide icon name) |
+| `REVIEWS` | Guest testimonials — paste real Booking.com / Airbnb text here |
+| `RATING_SUMMARY` | The big rating block in the Reviews section |
+| `LOCATION_POINTS` | The bullets under the map |
+| `FOOTER_LINKS` | Nav / Stay / Nearby columns in the footer |
+| `IMAGES` | All image paths + alt text (main + mini) |
+| `ROOMS` | The two products — name, tagline, features, hero photo, Airbnb URL |
+| `BOOKING` | Airbnb listing id, Booking.com slug, phone formats |
+| `HOST_TAGLINE`, `HOST_ADDRESS` | Footer copy |
 
-| Platform     | Listing URL                                                                 | Param mapping                                      |
-|--------------|------------------------------------------------------------------------------|----------------------------------------------------|
-| Airbnb       | `https://www.airbnb.com/rooms/1421503954372049985`                          | `check_in`, `check_out`, `adults`                  |
-| Booking.com  | `https://www.booking.com/hotel/gr/pantheon-apartments-paralia-katerines.html` | `checkin`, `checkout`, `group_adults`, `no_rooms=1` |
-| Phone        | `tel:+306944187226`                                                          | (no params — direct dial)                          |
+Edits hot-reload during `npm run dev`. To ship, commit and push — the workflow deploys in ~40 seconds.
 
-Without JS, the tile links still work — they just go to the listing pages without prefilled dates. The phone tile is a pure `<a href="tel:…">` so it works regardless.
+## The booking section
 
-To swap the Airbnb listing id, Booking.com slug, or phone number, edit the `BOOKING` constant in `src/lib/content.ts`.
+The CTA at the bottom of the page has a **room selector** at the top. Picking a room rewires the Airbnb tile to that room's specific listing and clamps the guest input to that room's max capacity.
 
-## GitHub Pages deployment
+URL prefill mapping per platform:
 
-Workflow at `.github/workflows/deploy.yml` builds and publishes the `dist/` folder on every push to `main`. To enable:
+| Platform | Base URL | Params |
+|---|---|---|
+| Airbnb (per room) | `airbnb.com/rooms/<listing_id>` | `check_in`, `check_out`, `adults` |
+| Booking.com (shared) | `booking.com/hotel/gr/pantheon-apartments-paralia-katerines.html` | `checkin`, `checkout`, `group_adults`, `no_rooms=1` |
+| Phone | `tel:+306944187226` | (none — direct dial) |
 
-1. Push this repo to GitHub.
-2. In **Settings → Pages**, set source to **GitHub Actions**.
-3. (Optional) Add your custom domain in the same settings page — GitHub will create a `CNAME` file in the deployed artifact. Do **not** add a CNAME file to the repo manually; let GH Pages manage it.
+The Rooms section cards above don't link straight to Airbnb — they have **"Reserve this room"** buttons that anchor-scroll down to the booking section AND pre-select that room's radio. So a click on the Deluxe Double Room card → user lands on the booking CTA with that room already selected.
 
-### `base` path
+## SEO + Google indexing
 
-- Hosting at a custom domain (e.g. `pantheonapartments.gr`) or at a user/org site (`<user>.github.io`): leave `base` at the default in `astro.config.mjs` (no change needed).
-- Hosting at a project site (`<user>.github.io/<repo-name>/`): set `base: '/<repo-name>/'` in `astro.config.mjs`. Image paths and internal links use root-relative URLs, so this is the only change required.
+- `robots.txt` allows all crawlers and references the sitemap
+- `sitemap-index.xml` is generated at build time by `@astrojs/sitemap`
+- Every page has a `<link rel="canonical">` pointing to the absolute URL
+- `<meta property="og:*">` + Twitter Card meta — rich previews when the URL is shared
+- `<script type="application/ld+json">` in `BaseLayout` ships a **LodgingBusiness** schema covering both rooms — Google may surface this as a knowledge panel
 
-### Folder caveat
+To register the site with Google Search Console (one-time, requires the host's Google account), see the section below.
 
-The workflow's `working-directory` is `"Pantheon Apartments v3"` (with spaces). If you ever flatten the repo so this folder is the root, drop the `working-directory` and `cache-dependency-path` overrides.
+## Deployment
+
+Workflow at `.github/workflows/deploy.yml` (at the **repo root**, not inside this folder). Triggers on push to `main`. All GitHub Actions are SHA-pinned to immutable commits for supply-chain safety.
+
+The `working-directory` is hardcoded to `"Pantheon Apartments v3"` — if you ever flatten the repo so this folder is the root, drop both the `working-directory` and `cache-dependency-path` overrides.
+
+### Custom domain
+
+DNS records on Papaki (`papaki.gr`) point `pantheon-apartments.gr` at GitHub Pages's anycast IPs (4× A records) plus a CNAME for `www`. GitHub auto-provisioned a Let's Encrypt cert covering both apex + www. HTTPS is enforced — HTTP requests get a 301 redirect.
 
 ## Still TODO
 
-- Replace the two placeholder reviews flagged `placeholder: true` in `src/lib/content.ts` once real Airbnb guest reviews are available.
-- Footer's "Contact via Airbnb" link currently has `href="#"` — replace with the actual Airbnb listing URL.
-- SEO: Open Graph image, JSON-LD `LodgingBusiness` schema.
-- Greek language version (`/el/` route or toggle).
-- Verify photo filenames (`bedroom.jpg`, `kitchen.jpg`, etc.) actually match the photo contents and rename if wrong.
+- **Greek-language version** — `/el/` route or a language toggle. Most guests are Greek, Bulgarian, Romanian, Serbian based on the Booking.com reviews; a Greek site would help discovery.
+- **Replace m4 (mini bathroom)** when the host re-shoots with a neutral shower curtain
+- **Replace footer's "Contact via Airbnb"** placeholder href with a real link
+- **Google Analytics 4** — currently no analytics installed; add the GA4 snippet to `BaseLayout` once a property is created
+- **Switch to Booking.com Genius / Hostaway** integration if a real direct-booking widget is needed (currently the booking CTA just redirects to the platforms)

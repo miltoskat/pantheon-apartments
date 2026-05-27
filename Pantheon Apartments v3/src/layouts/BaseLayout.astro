@@ -4,6 +4,12 @@ import Nav from "@/components/Nav.astro";
 import Footer from "@/components/Footer.astro";
 import FadeIn from "@/components/FadeIn.astro";
 import { withBase } from "@/lib/url";
+import {
+  BOOKING,
+  HOST_ADDRESS,
+  RATING_SUMMARY,
+  ROOMS,
+} from "@/lib/content";
 
 interface Props {
   title?: string;
@@ -12,10 +18,57 @@ interface Props {
 
 const {
   title = "Pantheon Apartments — Paralia Katerinis",
-  description = "A private seafront apartment in Paralia Katerinis where the Aegean meets the foot of Mount Olympus. Direct booking — Airbnb, Booking.com, or call the host.",
+  description = "Seafront apartments in Paralia Katerinis, Greece. Two stays to choose from — a One-Bedroom Apartment and a Deluxe Double Room. Direct booking via Airbnb, Booking.com, or by phone.",
 } = Astro.props;
 
-const ogImage = new URL(withBase("/logo.jpg"), Astro.site ?? "https://pantheon-apartments.gr").toString();
+const siteUrl = Astro.site?.toString().replace(/\/$/, "") ?? "https://pantheon-apartments.gr";
+const canonical = new URL(Astro.url.pathname, siteUrl).toString();
+const ogImage = new URL(withBase("/logo.jpg"), siteUrl).toString();
+
+/* LodgingBusiness schema — helps Google show rich results and understand the property.
+ * Both rooms are listed as containsPlace entries. */
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LodgingBusiness",
+  name: "Pantheon Apartments",
+  description,
+  url: siteUrl,
+  image: [ogImage, new URL(withBase("/images/hero-exterior.jpg"), siteUrl).toString()],
+  telephone: BOOKING.phone.tel,
+  priceRange: "€€",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Paralia Katerinis",
+    addressLocality: "Paralia",
+    addressRegion: "Pieria",
+    postalCode: "60100",
+    addressCountry: "GR",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 40.269,
+    longitude: 22.594,
+  },
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: RATING_SUMMARY.score,
+    bestRating: "10",
+    reviewCount: RATING_SUMMARY.count.replace(/\D/g, ""),
+  },
+  amenityFeature: [
+    { "@type": "LocationFeatureSpecification", name: "Free WiFi", value: true },
+    { "@type": "LocationFeatureSpecification", name: "Free parking", value: true },
+    { "@type": "LocationFeatureSpecification", name: "Air conditioning", value: true },
+    { "@type": "LocationFeatureSpecification", name: "Beach access", value: true },
+  ],
+  containsPlace: ROOMS.map((room) => ({
+    "@type": "Accommodation",
+    name: room.name,
+    description: room.tagline,
+    occupancy: { "@type": "QuantitativeValue", value: room.sleeps, unitCode: "C62" },
+    url: room.airbnbUrl,
+  })),
+};
 ---
 
 <!doctype html>
@@ -26,14 +79,24 @@ const ogImage = new URL(withBase("/logo.jpg"), Astro.site ?? "https://pantheon-a
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="keywords" content="Pantheon Apartments, Paralia Katerinis, Pieria, Greece vacation rental, Mount Olympus, Aegean Sea, short-term rental Katerini" />
+    <meta name="author" content="Pantheon Apartments" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonical} />
+
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:width" content="382" />
-    <meta property="og:image:height" content="382" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image:width" content="825" />
+    <meta property="og:image:height" content="825" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="Pantheon Apartments" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
 
     <link rel="icon" type="image/png" sizes="512x512" href={withBase("/favicon.png")} />
     <link rel="icon" type="image/x-icon" href={withBase("/favicon.ico")} />
@@ -44,6 +107,12 @@ const ogImage = new URL(withBase("/logo.jpg"), Astro.site ?? "https://pantheon-a
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap"
+    />
+
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(jsonLd)}
     />
   </head>
   <body>

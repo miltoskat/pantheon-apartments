@@ -1,7 +1,7 @@
 export const NAV_LINKS = [
   { href: "#about", label: "About" },
   { href: "#gallery", label: "Gallery" },
-  { href: "#amenities", label: "Amenities" },
+  { href: "#rooms", label: "Rooms" },
   { href: "#reviews", label: "Reviews" },
   { href: "#location", label: "Location" },
 ] as const;
@@ -121,6 +121,7 @@ export const FOOTER_LINKS = {
     { href: "#about", label: "About" },
     { href: "#gallery", label: "Gallery" },
     { href: "#amenities", label: "Amenities" },
+    { href: "#rooms", label: "Rooms" },
     { href: "#reviews", label: "Reviews" },
   ],
   stay: [
@@ -146,7 +147,49 @@ export const IMAGES = {
   bathroomSuite:  { src: "/images/bathroom-suite.jpg", alt: "Marble-finished bathroom with walk-in shower and washing machine" },
   kitchenDetail:  { src: "/images/kitchen-detail.jpg", alt: "Kitchen countertop with induction cooktop and espresso machine" },
   diningArea:     { src: "/images/dining-area.jpg",    alt: "Dining table and adjacent fully-equipped kitchen" },
+
+  /* Deluxe Double Room (the "mini" — Airbnb listing 1425494331619495771) */
+  miniBedroom:        { src: "/images/mini/mini-bedroom.jpg",       alt: "Deluxe Double Room bedroom with modern lighting" },
+  miniBedroomAngle:   { src: "/images/mini/mini-bedroom-angle.jpg", alt: "Deluxe Double Room from another angle" },
+  miniBedroomFoot:    { src: "/images/mini/mini-bedroom-foot.jpg",  alt: "Deluxe Double Room with wall-mounted TV" },
+  miniBathroom:       { src: "/images/mini/mini-bathroom.jpg",      alt: "Deluxe Double Room private bathroom" },
+  miniVanity:         { src: "/images/mini/mini-vanity.jpg",        alt: "Marble vanity with vessel sink in the Deluxe Double Room" },
+  miniCorridor:       { src: "/images/mini/mini-corridor.jpg",      alt: "Building corridor leading to the room" },
 } as const;
+
+/* The two booking products. Order matters: cards render in this order. */
+export const ROOMS = [
+  {
+    id: "one-bedroom-apartment",
+    name: "One-Bedroom Apartment",
+    tagline: "A full home with kitchen and balcony — best for families and longer stays.",
+    sleeps: 4,
+    features: [
+      { icon: "lucide:users",     label: "Sleeps 4" },
+      { icon: "lucide:chef-hat",  label: "Full kitchen" },
+      { icon: "lucide:sun",       label: "Private balcony" },
+      { icon: "lucide:bath",      label: "Private bathroom" },
+    ],
+    hero:   "/images/living-room.jpg",
+    thumbs: ["/images/bedroom.jpg", "/images/kitchen.jpg", "/images/bathroom-suite.jpg"],
+    airbnbUrl: "https://www.airbnb.com/rooms/1421503954372049985",
+  },
+  {
+    id: "deluxe-double-room",
+    name: "Deluxe Double Room",
+    tagline: "Modern, comfortable, 350 m from the sea — ideal for couples and short stays.",
+    sleeps: 2,
+    features: [
+      { icon: "lucide:users",       label: "Sleeps 2" },
+      { icon: "lucide:bed-double",  label: "Double bed" },
+      { icon: "lucide:bath",        label: "Ensuite bathroom" },
+      { icon: "lucide:sparkles",    label: "Recently renovated" },
+    ],
+    hero:   "/images/mini/mini-bedroom.jpg",
+    thumbs: ["/images/mini/mini-bathroom.jpg", "/images/mini/mini-vanity.jpg", "/images/mini/mini-corridor.jpg"],
+    airbnbUrl: "https://www.airbnb.com/rooms/1425494331619495771",
+  },
+] as const;
 
 export const HOST_TAGLINE =
   "Where the Aegean meets the foot of Olympus — your private Greek summer in the heart of Paralia Katerinis.";

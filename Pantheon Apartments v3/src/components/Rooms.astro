@@ -1,0 +1,100 @@
+---
+import { Icon } from "astro-icon/components";
+import Eyebrow from "./Eyebrow.astro";
+import { ROOMS } from "@/lib/content";
+import { withBase } from "@/lib/url";
+---
+
+<section id="rooms" class="bg-cream px-5 py-20 md:px-14 md:py-28">
+  <div class="mx-auto max-w-6xl">
+    <div class="fade-in">
+      <Eyebrow>The Rooms</Eyebrow>
+      <h2
+        class="mt-4 font-display font-light leading-[1.15] text-text-dark text-[clamp(2rem,5vw,3.4rem)]"
+      >
+        Two stays, <em class="italic text-gold">one address</em>
+      </h2>
+      <p class="mt-5 max-w-xl text-[0.95rem] font-light leading-[1.85] text-text-mid">
+        Whether you're travelling as a family or as a couple, there's a room for
+        you. Both share the same seafront location, the same friendly host,
+        and the same direct-booking advantages.
+      </p>
+    </div>
+
+    <div class="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
+      {
+        ROOMS.map((room, i) => (
+          <div
+            class="fade-in group flex flex-col overflow-hidden border border-border-gold bg-warm-white transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgb(13_27_42_/_0.08)]"
+            data-delay={i === 0 ? undefined : 1}
+          >
+            <div class="relative aspect-[4/3] overflow-hidden">
+              <img
+                src={withBase(room.hero)}
+                alt={room.name}
+                class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div class="grid grid-cols-3 gap-px bg-border-gold">
+              {room.thumbs.map((src) => (
+                <div class="aspect-[4/3] overflow-hidden bg-warm-white">
+                  <img
+                    src={withBase(src)}
+                    alt=""
+                    aria-hidden="true"
+                    class="h-full w-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div class="flex flex-1 flex-col p-7 md:p-9">
+              <h3 class="font-display text-[1.6rem] font-light text-text-dark md:text-[1.9rem]">
+                {room.name}
+              </h3>
+              <p class="mt-3 text-[0.9rem] font-light leading-[1.7] text-text-mid">
+                {room.tagline}
+              </p>
+
+              <ul class="mt-6 grid grid-cols-2 gap-x-4 gap-y-3 text-[0.82rem] text-text-mid">
+                {room.features.map((f) => (
+                  <li class="flex items-center gap-2">
+                    <Icon name={f.icon} class="h-4 w-4 flex-shrink-0 text-gold" aria-hidden="true" />
+                    <span>{f.label}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <a
+                href={room.airbnbUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mt-8 inline-flex items-center justify-center gap-2 self-start bg-gold px-7 py-3 text-[0.72rem] font-medium uppercase tracking-[0.18em] text-navy transition-[background,transform] hover:-translate-y-px hover:bg-gold-light"
+              >
+                Book on Airbnb
+                <Icon name="lucide:arrow-up-right" class="h-3.5 w-3.5" aria-hidden="true" />
+              </a>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <p class="mt-10 max-w-2xl text-center mx-auto text-[0.8rem] font-light text-text-muted">
+      Both rooms are also bookable as separate options on{" "}
+      <a
+        href="https://www.booking.com/hotel/gr/pantheon-apartments-paralia-katerines.html"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-gold underline-offset-2 hover:underline"
+      >
+        Booking.com
+      </a>
+      , or call the host directly for any custom arrangement.
+    </p>
+  </div>
+</section>

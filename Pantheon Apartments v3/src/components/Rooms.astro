@@ -70,13 +70,12 @@ import { withBase } from "@/lib/url";
               </ul>
 
               <a
-                href={room.airbnbUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#booking"
+                data-reserve-room={room.id}
                 class="mt-8 inline-flex items-center justify-center gap-2 self-start bg-gold px-7 py-3 text-[0.72rem] font-medium uppercase tracking-[0.18em] text-navy transition-[background,transform] hover:-translate-y-px hover:bg-gold-light"
               >
-                Book on Airbnb
-                <Icon name="lucide:arrow-up-right" class="h-3.5 w-3.5" aria-hidden="true" />
+                Reserve this room
+                <Icon name="lucide:arrow-down" class="h-3.5 w-3.5" aria-hidden="true" />
               </a>
             </div>
           </div>
@@ -85,16 +84,11 @@ import { withBase } from "@/lib/url";
     </div>
 
     <p class="mt-10 max-w-2xl text-center mx-auto text-[0.8rem] font-light text-text-muted">
-      Both rooms are also bookable as separate options on{" "}
-      <a
-        href="https://www.booking.com/hotel/gr/pantheon-apartments-paralia-katerines.html"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-gold underline-offset-2 hover:underline"
-      >
-        Booking.com
-      </a>
-      , or call the host directly for any custom arrangement.
+      Both rooms are bookable via Airbnb, Booking.com, or directly with the
+      host — pick your platform in the{" "}
+      <a href="#booking" class="text-gold underline-offset-2 hover:underline">
+        booking section below
+      </a>.
     </p>
   </div>
 </section>

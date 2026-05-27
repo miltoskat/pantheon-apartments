@@ -1,7 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import Eyebrow from "./Eyebrow.astro";
-import { BOOKING } from "@/lib/content";
+import { BOOKING, ROOMS } from "@/lib/content";
 
 const today = new Date();
 const minDate = today.toISOString().slice(0, 10);
@@ -9,6 +9,9 @@ const minDate = today.toISOString().slice(0, 10);
 const tomorrow = new Date(today);
 tomorrow.setDate(tomorrow.getDate() + 1);
 const minCheckout = tomorrow.toISOString().slice(0, 10);
+
+const defaultRoom = ROOMS[0];
+const maxGuestsAcrossRooms = Math.max(...ROOMS.map((r) => r.sleeps));
 ---
 
 <section
@@ -28,14 +31,53 @@ const minCheckout = tomorrow.toISOString().slice(0, 10);
     <p
       class="mx-auto mt-6 max-w-xl text-[0.95rem] font-light leading-[1.85] text-text-mid"
     >
-      Pick your dates and number of guests, then choose where to book —
+      Pick your room, set your dates, then choose where to book —
       we'll take you there with your selection ready.
     </p>
 
-    <!-- Shared inputs -->
+    <!-- Room selector -->
+    <fieldset
+      id="booking-room"
+      class="mt-10 grid grid-cols-1 gap-3 text-left sm:grid-cols-2 sm:gap-4"
+    >
+      <legend class="sr-only">Choose your room</legend>
+      {
+        ROOMS.map((room, i) => (
+          <label class="group block cursor-pointer">
+            <input
+              type="radio"
+              name="booking-room"
+              value={room.id}
+              checked={i === 0}
+              data-max-guests={room.sleeps}
+              data-airbnb-url={room.airbnbUrl}
+              class="peer sr-only"
+            />
+            <div class="flex h-full items-center gap-4 border-2 border-border-gold bg-warm-white p-5 transition-[border-color,background,box-shadow] peer-checked:border-gold peer-checked:shadow-[0_4px_24px_rgb(196_151_58_/_0.18)] peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-gold/60">
+              <span
+                class="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border-2 border-border-gold transition-colors peer-checked:group-[]:border-gold"
+                aria-hidden="true"
+              >
+                <span class="h-2 w-2 rounded-full bg-gold opacity-0 transition-opacity group-has-[:checked]:opacity-100" />
+              </span>
+              <div class="flex-1">
+                <div class="font-display text-[1.05rem] font-normal text-text-dark md:text-[1.15rem]">
+                  {room.name}
+                </div>
+                <div class="mt-0.5 text-[0.7rem] uppercase tracking-[0.18em] text-text-muted">
+                  Sleeps {room.sleeps}
+                </div>
+              </div>
+            </div>
+          </label>
+        ))
+      }
+    </fieldset>
+
+    <!-- Date/guest inputs -->
     <div
       id="booking-form"
-      class="mt-10 grid grid-cols-1 gap-px border border-border-gold bg-warm-white p-2 text-left shadow-[0_4px_40px_rgb(13_27_42_/_0.08)] md:grid-cols-3 md:p-0"
+      class="mt-4 grid grid-cols-1 gap-px border border-border-gold bg-warm-white p-2 text-left shadow-[0_4px_40px_rgb(13_27_42_/_0.08)] md:grid-cols-3 md:p-0"
     >
       <label class="bg-cream p-5 transition-colors hover:bg-sand md:border-r md:border-border-gold">
         <span class="block text-[0.6rem] uppercase tracking-[0.2em] text-text-muted">
@@ -69,10 +111,10 @@ const minCheckout = tomorrow.toISOString().slice(0, 10);
           type="number"
           id="booking-guests"
           min="1"
-          max="4"
-          value="2"
+          max={maxGuestsAcrossRooms}
+          value={Math.min(2, defaultRoom.sleeps)}
           class="mt-1 w-full bg-transparent font-display text-[1.05rem] text-text-dark outline-none"
-          aria-label="Number of guests (1 to 4)"
+          aria-label={`Number of guests (1 to ${maxGuestsAcrossRooms})`}
         />
       </label>
     </div>
@@ -81,7 +123,7 @@ const minCheckout = tomorrow.toISOString().slice(0, 10);
     <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
       <a
         id="book-airbnb"
-        href={BOOKING.airbnb.listingUrl}
+        href={defaultRoom.airbnbUrl}
         target="_blank"
         rel="noopener noreferrer"
         class="group flex flex-col items-center justify-between gap-5 border border-border-gold bg-warm-white p-7 text-center transition-[transform,box-shadow,background] hover:-translate-y-1 hover:border-gold hover:shadow-[0_12px_32px_rgb(13_27_42_/_0.10)]"
@@ -95,7 +137,7 @@ const minCheckout = tomorrow.toISOString().slice(0, 10);
               Airbnb
             </div>
             <p class="mt-1 text-[0.78rem] font-light text-text-muted">
-              ★ 4.63 · Verified host
+              Direct to the room you picked
             </p>
           </div>
         </div>
@@ -123,7 +165,7 @@ const minCheckout = tomorrow.toISOString().slice(0, 10);
               Booking.com
             </div>
             <p class="mt-1 text-[0.78rem] font-light text-text-muted">
-              Free cancellation available
+              Both rooms in one listing
             </p>
           </div>
         </div>
@@ -178,8 +220,16 @@ const minCheckout = tomorrow.toISOString().slice(0, 10);
     const guests = document.getElementById("booking-guests");
     const airbnb = document.getElementById("book-airbnb");
     const bookingCom = document.getElementById("book-bookingcom");
+    const roomRadios = document.querySelectorAll('input[name="booking-room"]');
 
     if (!checkin || !checkout || !guests || !airbnb || !bookingCom) return;
+
+    function getSelectedRoom() {
+      for (const r of roomRadios) {
+        if (r.checked) return r;
+      }
+      return roomRadios[0];
+    }
 
     function build(base, paramMap, extra) {
       const url = new URL(base);
@@ -204,12 +254,20 @@ const minCheckout = tomorrow.toISOString().slice(0, 10);
         d.setDate(d.getDate() + 1);
         checkout.value = d.toISOString().slice(0, 10);
       }
-      // Clamp guests 1..4
+
+      // Clamp guests to the selected room's capacity
+      const selected = getSelectedRoom();
+      const roomMax = parseInt(selected.dataset.maxGuests || "4", 10);
+      guests.max = String(roomMax);
       const g = parseInt(guests.value || "0", 10);
       if (!Number.isFinite(g) || g < 1) guests.value = "1";
-      else if (g > 4) guests.value = "4";
+      else if (g > roomMax) guests.value = String(roomMax);
 
-      airbnb.href = build(BOOKING.airbnb.listingUrl, BOOKING.airbnb.params);
+      // Airbnb base URL comes from the selected room (each room has its own listing)
+      const airbnbBase = selected.dataset.airbnbUrl || BOOKING.airbnb.listingUrl;
+      airbnb.href = build(airbnbBase, BOOKING.airbnb.params);
+
+      // Booking.com is one listing with both room types — single URL
       bookingCom.href = build(
         BOOKING.bookingCom.listingUrl,
         BOOKING.bookingCom.params,
@@ -220,7 +278,23 @@ const minCheckout = tomorrow.toISOString().slice(0, 10);
     [checkin, checkout, guests].forEach((el) =>
       el.addEventListener("input", updateLinks)
     );
-    // Run once so default guest count (2) is reflected in the hrefs immediately.
+    roomRadios.forEach((r) => r.addEventListener("change", updateLinks));
+
+    // Allow other components (e.g. the Rooms section) to pre-select a room
+    // before scrolling to #booking.
+    document.querySelectorAll("[data-reserve-room]").forEach((el) => {
+      el.addEventListener("click", () => {
+        const wanted = el.getAttribute("data-reserve-room");
+        for (const r of roomRadios) {
+          if (r.value === wanted) {
+            r.checked = true;
+            break;
+          }
+        }
+        updateLinks();
+      });
+    });
+
     updateLinks();
   })();
 </script>

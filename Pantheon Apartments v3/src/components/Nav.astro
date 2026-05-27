@@ -1,6 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import { NAV_LINKS } from "@/lib/content";
+import { withBase } from "@/lib/url";
 ---
 
 <nav
@@ -9,9 +10,17 @@ import { NAV_LINKS } from "@/lib/content";
 >
   <a
     href="#"
-    class="font-display text-[1.05rem] font-light uppercase tracking-[0.22em] text-warm-white md:text-[1.3rem]"
+    class="flex items-center gap-3 font-display text-[1.05rem] font-light uppercase tracking-[0.22em] text-warm-white md:text-[1.3rem]"
   >
-    Pantheon <span class="text-gold">·</span> Apartments
+    <img
+      src={withBase("/logo.png")}
+      alt=""
+      aria-hidden="true"
+      width="40"
+      height="40"
+      class="h-8 w-8 md:h-10 md:w-10"
+    />
+    <span>Pantheon <span class="text-gold">·</span> Apartments</span>
   </a>
 
   <ul class="hidden md:flex md:items-center md:gap-10">

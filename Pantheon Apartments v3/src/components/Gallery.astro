@@ -3,7 +3,8 @@ import Eyebrow from "./Eyebrow.astro";
 import { IMAGES } from "@/lib/content";
 import { withBase } from "@/lib/url";
 
-const ITEMS = [
+/* Main apartment — 8 photos in editorial mosaic (3 rows, 12 cols) */
+const MAIN_ITEMS = [
   { ...IMAGES.hero,          spans: "lg:col-span-5 lg:row-span-2 lg:aspect-auto" },
   { ...IMAGES.livingRoom,    spans: "lg:col-span-4" },
   { ...IMAGES.bedroom,       spans: "lg:col-span-3" },
@@ -12,6 +13,16 @@ const ITEMS = [
   { ...IMAGES.diningArea,    spans: "lg:col-span-4" },
   { ...IMAGES.kitchenDetail, spans: "lg:col-span-4" },
   { ...IMAGES.bathroomSuite, spans: "lg:col-span-4" },
+];
+
+/* Deluxe Double Room — 6 photos in a tidy 3-col grid */
+const MINI_ITEMS = [
+  IMAGES.miniBedroom,
+  IMAGES.miniBedroomAngle,
+  IMAGES.miniBedroomFoot,
+  IMAGES.miniVanity,
+  IMAGES.miniBathroom,
+  IMAGES.miniCorridor,
 ];
 ---
 
@@ -26,26 +37,64 @@ const ITEMS = [
     </h2>
   </div>
 
-  <div
-    class="mx-auto grid max-w-6xl grid-cols-2 gap-2 lg:grid-cols-12 lg:grid-rows-[260px_260px_260px] lg:gap-2"
-  >
-    {
-      ITEMS.map((item) => (
-        <div
-          class:list={[
-            "group relative aspect-[4/3] overflow-hidden lg:aspect-auto lg:h-full",
-            item.spans,
-          ]}
-        >
-          <img
-            src={withBase(item.src)}
-            alt={item.alt}
-            class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
-      ))
-    }
+  <!-- One-Bedroom Apartment subgallery -->
+  <div class="mx-auto max-w-6xl">
+    <div class="fade-in mb-5 flex items-end justify-between gap-4">
+      <h3 class="font-display text-[1.3rem] font-light text-warm-white md:text-[1.6rem]">
+        One-Bedroom Apartment
+      </h3>
+      <span class="text-[0.65rem] uppercase tracking-[0.22em] text-white/40">
+        8 photos · Sleeps 4
+      </span>
+    </div>
+    <div
+      class="grid grid-cols-2 gap-2 lg:grid-cols-12 lg:grid-rows-[260px_260px_260px] lg:gap-2"
+    >
+      {
+        MAIN_ITEMS.map((item) => (
+          <div
+            class:list={[
+              "group relative aspect-[4/3] overflow-hidden lg:aspect-auto lg:h-full",
+              item.spans,
+            ]}
+          >
+            <img
+              src={withBase(item.src)}
+              alt={item.alt}
+              class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- Deluxe Double Room subgallery -->
+  <div class="mx-auto mt-16 max-w-6xl">
+    <div class="fade-in mb-5 flex items-end justify-between gap-4">
+      <h3 class="font-display text-[1.3rem] font-light text-warm-white md:text-[1.6rem]">
+        Deluxe Double Room
+      </h3>
+      <span class="text-[0.65rem] uppercase tracking-[0.22em] text-white/40">
+        6 photos · Sleeps 2
+      </span>
+    </div>
+    <div class="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-2">
+      {
+        MINI_ITEMS.map((item) => (
+          <div class="group relative aspect-[4/3] overflow-hidden">
+            <img
+              src={withBase(item.src)}
+              alt={item.alt}
+              class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        ))
+      }
+    </div>
   </div>
 </section>

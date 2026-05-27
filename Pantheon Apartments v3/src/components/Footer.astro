@@ -6,6 +6,7 @@ import {
   HOST_ADDRESS,
   RATING_SUMMARY,
 } from "@/lib/content";
+import { withBase } from "@/lib/url";
 
 const year = new Date().getFullYear();
 ---
@@ -17,9 +18,17 @@ const year = new Date().getFullYear();
     <div>
       <a
         href="#"
-        class="font-display text-[1.4rem] font-light uppercase tracking-[0.2em] text-warm-white"
+        class="inline-flex items-center gap-3 font-display text-[1.4rem] font-light uppercase tracking-[0.2em] text-warm-white"
       >
-        Pantheon <span class="text-gold">·</span> Apartments
+        <img
+          src={withBase("/logo.png")}
+          alt=""
+          aria-hidden="true"
+          width="48"
+          height="48"
+          class="h-12 w-12"
+        />
+        <span>Pantheon <span class="text-gold">·</span> Apartments</span>
       </a>
       <p class="mt-4 max-w-[260px] text-[0.8rem] font-light leading-[1.7] text-white/45">
         {HOST_TAGLINE}
